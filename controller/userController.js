@@ -20,7 +20,7 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Please Fill Full Form!", 400));
   }
 
-  const isRegistered = await User.findOne({ email });
+  const isRegistered = await User.findOne({ email },{new:true,runValidators:true});
   if (isRegistered) {
     return next(new ErrorHandler("User already Registered!", 400));
   }
@@ -37,7 +37,7 @@ export const patientRegister = catchAsyncErrors(async (req, res, next) => {
     role: "Patient",
   });
   generateToken(user, "User Registered!", 200, res);
-});
+},{new:true,runValidators:true});
 
 export const login = catchAsyncErrors(async (req, res, next) => {
   const { email, password, confirmPassword, role } = req.body;
@@ -201,6 +201,8 @@ export const logoutAdmin = catchAsyncErrors(async (req, res, next) => {
     .cookie("adminToken", "", {
       httpOnly: true,
       expires: new Date(Date.now()),
+      secure:true,
+      sameSite:"None"
     })
     .json({
       success: true,
@@ -215,6 +217,8 @@ export const logoutPatient = catchAsyncErrors(async (req, res, next) => {
     .cookie("patientToken", "", {
       httpOnly: true,
       expires: new Date(Date.now()),
+      secure:true,
+      sameSite:"None"
     })
     .json({
       success: true,

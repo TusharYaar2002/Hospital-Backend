@@ -40,7 +40,7 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     lastName: doctor_lastName,
     role: "Doctor",
     doctorDepartment: department,
-  });
+  },{new:true,runValidators:true});
   if (isConflict.length === 0) {
     return next(new ErrorHandler("Doctor not found", 404));
   }
@@ -73,7 +73,7 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
     address,
     doctorId,
     patientId,
-  });
+  },{new:true,runValidators:true});
   res.status(200).json({
     success: true,
     appointment,
